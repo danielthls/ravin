@@ -12,7 +12,9 @@ uses
   UfrmProdutos in '..\codigo\formularios\UfrmProdutos.pas' {frmProdutos},
   UfrmPainelGestao in '..\codigo\formularios\UfrmPainelGestao.pas' {frmPainelGestao},
   UfrmComandas in '..\codigo\formularios\UfrmComandas.pas' {frmComandas},
-  UResourceUtils in '..\codigo\utils\UResourceUtils.pas';
+  UResourceUtils in '..\codigo\utils\UResourceUtils.pas',
+  UfrmLogin in '..\codigo\formularios\UfrmLogin.pas' {frmLogin},
+  UfrmBotaozao in '..\codigo\frames\UfrmBotaozao.pas' {frmBotao: TFrame};
 
 {$R *.res}
 
@@ -22,10 +24,5 @@ begin
   ReportMemoryLeaksOnShutdown := True;
   Application.CreateForm(TdmRavin, dmRavin);
   Application.CreateForm(TfrmSplash, frmSplash);
-  Application.CreateForm(TfrmMesas, frmMesas);
-  Application.CreateForm(TfrmSobre, frmSobre);
-  Application.CreateForm(TfrmProdutos, frmProdutos);
-  Application.CreateForm(TfrmPainelGestao, frmPainelGestao);
-  Application.CreateForm(TfrmComandas, frmComandas);
   Application.Run;
 end.
