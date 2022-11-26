@@ -253,6 +253,9 @@ insert into pessoa (nome, tipoPessoa, cpf, telefone, ativo, criadoEm, criadoPor,
 insert into pessoa (nome, tipoPessoa, cpf, telefone, ativo, criadoEm, criadoPor, alteradoEm, alteradoPor) values ('Darbee', 'C', 198, 198, true, '2021-12-15', 'Pasquale', '2022-01-26', 'Keven');
 insert into pessoa (nome, tipoPessoa, cpf, telefone, ativo, criadoEm, criadoPor, alteradoEm, alteradoPor) values ('Eben', 'C', 199, 199, false, '2022-07-10', 'Cy', '2021-12-11', 'Nickola');
 insert into pessoa (nome, tipoPessoa, cpf, telefone, ativo, criadoEm, criadoPor, alteradoEm, alteradoPor) values ('Lucky', 'C', 200, 200, true, '2021-11-29', 'Meggy', '2022-06-22', 'Beitris');
+
+insert into usuario (login, senha, pessoaId, criadoEm, criadoPor, alteradoEm, alteradoPor) values ('marcio', '12345', 1, '2022-07-27', 'Gregg', '2022-01-26', 'Rafaelia');
+
 insert into pessoa (nome, tipoPessoa, cpf, telefone, ativo, criadoEm, criadoPor, alteradoEm, alteradoPor) values ('Devora', 'C', 201, 201, false, '2022-05-14', 'Mathilda', '2022-04-04', 'Deeanne');
 insert into pessoa (nome, tipoPessoa, cpf, telefone, ativo, criadoEm, criadoPor, alteradoEm, alteradoPor) values ('Kacie', 'C', 202, 202, true, '2022-01-02', 'Jill', '2022-03-12', 'Madalena');
 insert into pessoa (nome, tipoPessoa, cpf, telefone, ativo, criadoEm, criadoPor, alteradoEm, alteradoPor) values ('Viv', 'C', 203, 203, false, '2021-12-06', 'Vina', '2022-06-30', 'Dottie');
@@ -2118,5 +2121,6 @@ insert into comandaProduto (produtoId, comandaId, statusComandaProdutoId, quanti
 insert into comandaProduto (produtoId, comandaId, statusComandaProdutoId, quantidade, valorTotal, criadoEm, criadoPor, alteradoEm, alteradoPor) values (2, 9, 2, 57, 6.86, '2021-12-21', 'Michelina', '2022-02-10', 'Lorrie');
 insert into comandaProduto (produtoId, comandaId, statusComandaProdutoId, quantidade, valorTotal, criadoEm, criadoPor, alteradoEm, alteradoPor) values (12, 34, 1, 29, 75.04, '2022-07-27', 'Gregg', '2022-01-26', 'Rafaelia');
 
+insert into usuario (login, senha, pessoaId, criadoEm, criadoPor, alteradoEm, alteradoPor) values ('marcio', '12345', 1, '2022-07-27', 'Gregg', '2022-01-26', 'Rafaelia');
 
 COMMIT;

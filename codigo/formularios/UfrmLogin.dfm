@@ -26,7 +26,6 @@ object frmLogin: TfrmLogin
     Margins.Bottom = 0
     Align = alClient
     Color = clWhite
-    Enabled = False
     ParentBackground = False
     TabOrder = 0
     object Image1: TImage
@@ -1192,11 +1191,12 @@ object frmLogin: TfrmLogin
         74646174653A74696D657374616D7000323032322D31312D30355430343A3139
         3A35342B30303A30308DD5E4F20000000049454E44AE426082}
       Stretch = True
+      OnClick = Image1Click
     end
     object Label1: TLabel
       Left = 0
       Top = 176
-      Width = 383
+      Width = 261
       Height = 33
       Alignment = taCenter
       Caption = 'Bem vindo de volta'
@@ -1210,7 +1210,7 @@ object frmLogin: TfrmLogin
     object Label2: TLabel
       Left = 0
       Top = 215
-      Width = 383
+      Width = 180
       Height = 23
       Alignment = taCenter
       Caption = 'Logue para continuar'
@@ -1249,6 +1249,7 @@ object frmLogin: TfrmLogin
       Font.Style = [fsBold]
       ParentColor = False
       ParentFont = False
+      OnClick = lblRegistrarClick
     end
     object edtLogin: TEdit
       Left = 32
@@ -1297,6 +1298,7 @@ object frmLogin: TfrmLogin
         Height = 49
         Align = alClient
         Caption = 'Autenticar'
+        OnClick = frmBotao1SpdBtnButtonClick
         ExplicitLeft = -26
         ExplicitTop = -6
         ExplicitHeight = 49
