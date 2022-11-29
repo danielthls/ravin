@@ -32,17 +32,19 @@ var
 implementation
 
 uses
-  UResourceUtils;
+  UResourceUtils, UiniUtils;
 
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 {$R *.dfm}
 
 procedure TdmRavin.cnxBancoDeDadosAfterConnect(Sender: TObject);
 var
+  xCaminho : string;
   LCriarBaseDados: Boolean;
 begin
-  LCriarBaseDados := not FileExists('C:\ProgramData\MySQL\' +
-                                    'MySQL Server 8.0\Data\ravin\pessoa.ibd');
+   xCaminho := TIniUtils.lerPropriedade(TSECAO.CAMINHOSIBD,
+    TPROPRIEDADE.PESSOA);  // Lê sessão CAMINHOSIBD propriedade PESSOA
+  LCriarBaseDados := not FileExists(xCaminho);
   if LCriarBaseDados then
     begin
       CriarTabelas;
@@ -53,20 +55,41 @@ end;
 procedure TdmRavin.cnxBancoDeDadosBeforeConnect(Sender: TObject);
 var
   LCriarBaseDados: Boolean;
+  xServer:string;
+  xUserName:string;
+  xPassword:string;
+  xDriverID:string;
+  xPort:String;
+  xDatabase:String;
+  xCaminho: String;
 begin
-  LCriarBaseDados := not FileExists('C:\ProgramData\MySQL\' +
-                                    'MySQL Server 8.0\Data\ravin\pessoa.ibd');
+  xCaminho := TIniUtils.lerPropriedade(TSECAO.CAMINHOSIBD,
+    TPROPRIEDADE.PESSOA);
+  LCriarBaseDados := not FileExists(xCaminho);
+
+  xServer := TIniUtils.lerPropriedade(TSECAO.BANCO_DE_DADOS,
+    TPROPRIEDADE.SERVER);
+  xUserName := TIniUtils.lerPropriedade(TSECAO.BANCO_DE_DADOS,
+    TPROPRIEDADE.USER_NAME);
+  xPassword := TIniUtils.lerPropriedade(TSECAO.BANCO_DE_DADOS,
+    TPROPRIEDADE.PASSWORD);
+  xDriverID := TIniUtils.lerPropriedade(TSECAO.BANCO_DE_DADOS,
+    TPROPRIEDADE.DRIVER_ID);
+  xPort := TIniUtils.lerPropriedade(TSECAO.BANCO_DE_DADOS,
+    TPROPRIEDADE.PORT);
+  xDatabase := TIniUtils.lerPropriedade(TSECAO.BANCO_DE_DADOS,
+    TPROPRIEDADE.DATABASE);
   with cnxBancoDeDados do
   begin
-    Params.Values['Server'] := 'localhost';
-    Params.Values['User_Name'] := 'root';
-    Params.Values['Password'] := 'root';
-    Params.Values['DriverId'] := 'MySQL';
-    Params.Values['Port'] := '3306';
+    Params.Values['Server'] := xServer;
+    Params.Values['User_Name'] := xUserName;
+    Params.Values['Password'] := xPassword;
+    Params.Values['DriverId'] := xDriverID;
+    Params.Values['Port'] := xPort;
 
     if not LCriarBaseDados then
       begin
-        Params.Values['Database'] := 'ravin';
+        Params.Values['Database'] := xDatabase;
       end;
   end;
 

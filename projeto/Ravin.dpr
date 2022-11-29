@@ -21,7 +21,8 @@ uses
   UfrmRegistrar in '..\codigo\formularios\UfrmRegistrar.pas' {frmRegistrar},
   UValidadorUsuario in '..\codigo\validadores\UValidadorUsuario.pas',
   UiniUtils in '..\codigo\utils\UiniUtils.pas',
-  TESTE in '..\TESTE.pas' {frmUsuariosTeste};
+  TESTE in '..\TESTE.pas' {frmUsuariosTeste},
+  UFormUtils in '..\codigo\utils\UFormUtils.pas';
 
 {$R *.res}
 

@@ -1,15 +1,11 @@
 unit UfrmPainelGestao;
-
 interface
-
 uses
   Winapi.Windows,
   Winapi.Messages,
-
   System.SysUtils,
   System.Variants,
   System.Classes,
-
   Vcl.Graphics,
   Vcl.Controls,
   Vcl.Forms,
@@ -18,7 +14,6 @@ uses
   Vcl.StdCtrls,
   Vcl.Imaging.pngimage,
   UfrmItemMenu;
-
 type
   TfrmPainelGestao = class(TForm)
     pnlMenu: TPanel;
@@ -49,19 +44,14 @@ type
   public
     { Public declarations }
   end;
-
 var
   frmPainelGestao: TfrmPainelGestao;
-
 implementation
-
 {$R *.dfm}
-
 uses
   UfrmSobre,
   UfrmProdutos,
-  UfrmMesas, UfrmComandas, UiniUtils, TESTE;
-
+  UfrmMesas, UfrmComandas, UiniUtils, TESTE, UFormUtils, UfrmLogin;
 procedure TfrmPainelGestao.FrameMenuItemMesasLabelTitleClick(Sender: TObject);
 begin
   if (not Assigned(frmMesas)) then
@@ -70,16 +60,13 @@ begin
   end;
   frmMesas.show();
 end;
-
 procedure TfrmPainelGestao.frmMenuItemComandaslblTituloClick(Sender: TObject);
 begin
   if(not Assigned(frmComandas)) then begin
     Application.CreateForm(TfrmComandas, frmComandas);
   end;
-
   frmComandas.show();
 end;
-
 procedure TfrmPainelGestao.frmMenuItemMesaslblTituloClick(Sender: TObject);
 begin
   if (not Assigned(frmMesas)) then
@@ -88,7 +75,6 @@ begin
   end;
   frmMesas.show();
 end;
-
 procedure TfrmPainelGestao.frmMenuItemPessoaslblTituloClick(Sender: TObject);
 begin
   if (not Assigned(frmUsuariosTeste)) then
@@ -106,16 +92,15 @@ begin
   end;
   frmProdutos.show();
 end;
-
 procedure TfrmPainelGestao.frmMenuItemSairlblTituloClick(Sender: TObject);
 begin
   TIniUtils.gravarPropriedade(TSECAO.INFORMACOES_GERAIS,
     TPROPRIEDADE.LOGADO,
     TIniUtils.VALOR_FALSO);
-
-  Application.Terminate();
+  TFormUtils.SetarFormPrincipal(frmLogin);
+  frmLogin.Show;
+  close;
 end;
-
 procedure TfrmPainelGestao.frmMenuItemSobrelblTituloClick(Sender: TObject);
 begin
   if (not Assigned(frmSobre)) then
@@ -124,5 +109,4 @@ begin
   end;
   frmSobre.show();
 end;
-
 end.

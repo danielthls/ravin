@@ -72,6 +72,7 @@ begin
   LQuery.SQL.Text := 'Select * from usuario';
   LQuery.Open;
   LQuery.First;
+
   while not LQuery.Eof do begin
     LUsuario := TUsuario.Create;
     LUsuario.id := LQuery.FieldByName('id').AsInteger;

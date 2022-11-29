@@ -6,6 +6,7 @@ uses
   System.SysUtils,
   System.Variants,
   System.Classes,
+  System.DateUtils,
   Vcl.Graphics,
   Vcl.Controls,
   Vcl.Forms,
@@ -26,9 +27,10 @@ type
     { Private declarations }
     Inicialized: Boolean;
     procedure InicializarAplicacao();
-    procedure SetarFormPrincipal(NewMainForm: TForm);
     procedure ShowPainelGestao;
     procedure ShowLogin;
+
+
   public
     { Public declarations }
   end;
@@ -36,7 +38,7 @@ var
   frmSplash: TfrmSplash;
 implementation
 {$R *.dfm}
-uses UfrmPainelGestao, UfrmLogin, UiniUtils;
+uses UfrmPainelGestao, UfrmLogin, UiniUtils, UFormUtils;
 procedure TfrmSplash.FormCreate(Sender: TObject);
 begin
   Inicialized := false;
@@ -47,6 +49,7 @@ procedure TfrmSplash.FormPaint(Sender: TObject);
 begin
   tmrSplash.Enabled := not Inicialized;
 end;
+
 procedure TfrmSplash.InicializarAplicacao;
 var
   LLogado: String;
@@ -58,6 +61,8 @@ begin
   else
     showLogin;
 end;
+
+
 procedure TfrmSplash.tmrSplashTimer(Sender: TObject);
 begin
   tmrSplash.Enabled := false;
@@ -67,20 +72,14 @@ begin
     InicializarAplicacao();
   end;
 end;
-procedure TfrmSplash.SetarFormPrincipal(NewMainForm: TForm);
-var
-  tmpMain: ^TCustomForm;
-begin
-  tmpMain := @Application.Mainform;
-  tmpMain^ := NewMainForm;
-end;
+
 procedure TfrmSplash.ShowLogin;
 begin
 if not Assigned(frmLogin) then
   begin
     Application.CreateForm(TfrmLogin, frmLogin);
   end;
-  SetarFormPrincipal(frmLogin);
+  TFormUtils.SetarFormPrincipal(frmLogin);
   frmLogin.Show();
   Close;
 end;
@@ -91,7 +90,7 @@ if not Assigned(frmPainelGestao) then
   begin
     Application.CreateForm(TfrmPainelGestao, frmPainelGestao);
   end;
-  SetarFormPrincipal(frmPainelGestao);
+  TFormUtils.SetarFormPrincipal(frmPainelGestao);
   frmPainelGestao.Show();
   Close;
 end;

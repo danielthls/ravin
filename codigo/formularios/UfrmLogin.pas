@@ -26,7 +26,7 @@ type
     procedure lblRegistrarClick(Sender: TObject);
   private
     { Private declarations }
-    procedure SetarFormPrincipal(PNovoFormulario: TForm);
+    procedure RegistrarHora;
     procedure abrirRegistrar;
   public
     { Public declarations }
@@ -38,7 +38,7 @@ var
 implementation
 
 uses
-  UfrmPainelGestao, Uusuario, UfrmRegistrar, UiniUtils;
+  UfrmPainelGestao, Uusuario, UfrmRegistrar, UiniUtils, UFormUtils;
 
 {$R *.dfm}
 
@@ -49,7 +49,7 @@ begin
     Application.CreateForm(TfrmRegistrar, frmRegistrar);
   end;
 
-  SetarFormPrincipal(frmRegistrar);
+  TFormUtils.SetarFormPrincipal(frmRegistrar);
   frmRegistrar.Show();
 
   Close();
@@ -103,10 +103,15 @@ begin
 
 
     frmPainelGestao.Show();
-    SetarFormPrincipal(frmPainelGestao);
+    TFormUtils.SetarFormPrincipal(frmPainelGestao);
 
     freeAndNil(LDao);
     freeAndNil(LUsuario);
+
+    RegistrarHora;
+
+    edtLogin.Text := '';
+    edtSenha.Text := '';
 
     Close();
   end
@@ -128,12 +133,12 @@ begin
   abrirRegistrar;
 end;
 
-procedure TfrmLogin.SetarFormPrincipal(PNovoFormulario: TForm);
-var
-  tmpMain: ^TCustomForm;
+procedure TfrmLogin.RegistrarHora;
 begin
-  tmpMain:= @Application.MainForm;
-  tmpMain^:= PNovoFormulario;
+  TIniUtils.gravarPropriedade(
+      TSECAO.LOGIN, TPROPRIEDADE.PESSOA, edtLogin.text);
+  TIniUtils.gravarPropriedade(
+      TSECAO.LOGIN, TPROPRIEDADE.ULTIMO_LOGIN, DateToStr(now));
 end;
 
 end.
