@@ -1299,7 +1299,7 @@ object frmLogin: TfrmLogin
         Align = alClient
         Caption = 'Autenticar'
         OnClick = frmBotao1SpdBtnButtonClick
-        ExplicitLeft = -26
+        ExplicitLeft = 0
         ExplicitTop = -6
         ExplicitHeight = 49
       end

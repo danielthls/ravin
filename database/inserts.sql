@@ -1,4 +1,4 @@
-START TRANSACTION;
+USE RAVIN;
 insert into statusMesa (nome) values ('Livre');
 insert into statusMesa (nome) values ('Reservada');
 insert into statusMesa (nome) values ('Ocupada');

@@ -28,6 +28,7 @@ type
     { Private declarations }
     procedure RegistrarHora;
     procedure abrirRegistrar;
+    procedure autenticar;
   public
     { Public declarations }
   end;
@@ -55,6 +56,56 @@ begin
   Close();
 end;
 
+procedure TfrmLogin.autenticar;
+var
+  LDao: TUsuarioDao;
+  LUsuario: TUsuario;
+
+  LLogin: String;
+  LSenha: String;
+begin
+  LDao := TUsuarioDao.Create;
+
+  try
+    LLogin := edtLogin.Text;
+    LSenha := edtSenha.Text;
+
+    LUsuario := LDao.BuscarUsuarioPorLoginSenha(LLogin, Lsenha);
+
+    if Assigned(LUsuario) then
+    begin
+      TIniUtils.gravarPropriedade(
+      TSECAO.INFORMACOES_GERAIS, TPROPRIEDADE.LOGADO, TIniUtils.VALOR_VERDADEIRO);
+
+      if not Assigned(frmPainelGestao) then
+      begin
+        Application.CreateForm(TfrmPainelGestao, frmPainelGestao);
+      end;
+
+
+      frmPainelGestao.Show();
+      TFormUtils.SetarFormPrincipal(frmPainelGestao);
+
+      freeAndNil(LUsuario);
+
+      RegistrarHora;
+
+      edtLogin.Text := '';
+      edtSenha.Text := '';
+
+      Close();
+    end
+    else
+    begin
+      showMessage('Login e/ou senha inválidos');
+    end;
+  finally
+    FreeAndNil(LDao);
+  end;
+
+
+end;
+
 procedure TfrmLogin.Button1Click(Sender: TObject);
 var
   LUsuario: TUsuario;
@@ -77,50 +128,8 @@ begin
 end;
 
 procedure TfrmLogin.frmBotao1SpdBtnButtonClick(Sender: TObject);
-var
-  LDao: TUsuarioDao;
-  LUsuario: TUsuario;
-
-  LLogin: String;
-  LSenha: String;
 begin
-  LDao := TUsuarioDao.Create;
-
-  LLogin := edtLogin.Text;
-  LSenha := edtSenha.Text;
-
-  LUsuario := LDao.BuscarUsuarioPorLoginSenha(LLogin, Lsenha);
-
-  if Assigned(LUsuario) then
-  begin
-    TIniUtils.gravarPropriedade(
-      TSECAO.INFORMACOES_GERAIS, TPROPRIEDADE.LOGADO, TIniUtils.VALOR_VERDADEIRO);
-
-    if not Assigned(frmPainelGestao) then
-    begin
-      Application.CreateForm(TfrmPainelGestao, frmPainelGestao);
-    end;
-
-
-    frmPainelGestao.Show();
-    TFormUtils.SetarFormPrincipal(frmPainelGestao);
-
-    freeAndNil(LDao);
-    freeAndNil(LUsuario);
-
-    RegistrarHora;
-
-    edtLogin.Text := '';
-    edtSenha.Text := '';
-
-    Close();
-  end
-  else
-  begin
-    FreeAndNil(LDao);
-    showMessage('Login e/ou senha inválidos');
-  end;
-
+  Autenticar;
 end;
 
 procedure TfrmLogin.Image1Click(Sender: TObject);

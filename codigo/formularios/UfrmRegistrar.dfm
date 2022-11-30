@@ -23068,24 +23068,21 @@ object frmRegistrar: TfrmRegistrar
       TabOrder = 4
       TextHint = 'Confirme sua senha'
     end
-    object MaskEdit1: TMaskEdit
+    object edtCpf: TEdit
       Left = 50
       Top = 176
       Width = 250
       Height = 27
-      EditMask = '000.000.000-00;1;_'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -16
       Font.Name = 'Roboto'
       Font.Style = []
-      MaxLength = 14
       ParentFont = False
-      ParentShowHint = False
-      ShowHint = False
       TabOrder = 5
-      Text = '   .   .   -  '
       TextHint = 'Digite seu CPF'
+      OnExit = edtCpfExit
+      OnKeyPress = edtCpfKeyPress
     end
   end
 end

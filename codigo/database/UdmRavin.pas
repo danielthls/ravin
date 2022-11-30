@@ -8,7 +8,7 @@ uses
   FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.MySQL,
   FireDAC.Phys.MySQLDef, FireDAC.VCLUI.Wait, Data.DB, FireDAC.Comp.Client,
   FireDAC.Comp.UI, FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf,
-  FireDAC.DApt, FireDAC.Comp.DataSet, Vcl.Dialogs;
+  FireDAC.DApt, FireDAC.Comp.DataSet, Vcl.Dialogs, System.IOUtils;
 
 type
   TdmRavin = class(TDataModule)
@@ -23,6 +23,7 @@ type
     { Private declarations }
     procedure CriarTabelas();
     procedure InserirDados();
+    procedure CarregaLib;
   public
     { Public declarations }
   end;
@@ -38,6 +39,24 @@ uses
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 {$R *.dfm}
 
+procedure TdmRavin.CarregaLib;
+//const Lib : string = 'libmysql.dll';
+//const Pasta : string = 'ravin/bibliotecas';
+var
+  xLib : string;
+  xPasta : String;
+  xCaminhoPastaLib : string;
+  xCaminhoLib : string;
+begin
+  xLib := TIniUtils.lerPropriedade(TSECAO.BANCO_DE_DADOS,
+    TPROPRIEDADE.LIB);
+  xPasta := TIniUtils.lerPropriedade(TSECAO.BANCO_DE_DADOS,
+    TPROPRIEDADE.PASTA_LIB);
+  xCaminhoPastaLib := TPath.Combine(TPath.GetDocumentsPath, xPasta);
+  xCaminhoLib := TPath.Combine(xCaminhoPastaLib,xLib);
+  drvBancoDeDados.VendorLib := xCaminhoLib;
+end;
+
 procedure TdmRavin.cnxBancoDeDadosAfterConnect(Sender: TObject);
 var
   xCaminho : string;
@@ -45,7 +64,7 @@ var
 begin
    xCaminho := TIniUtils.lerPropriedade(TSECAO.CAMINHOSIBD,
     TPROPRIEDADE.PESSOA);  // Lê sessão CAMINHOSIBD propriedade PESSOA
-  LCriarBaseDados := not FileExists(xCaminho);
+  LCriarBaseDados := {not} FileExists(xCaminho);
   if LCriarBaseDados then
     begin
       CriarTabelas;
@@ -127,7 +146,7 @@ end;
 
 procedure TdmRavin.DataModuleCreate(Sender: TObject);
 begin
-  //drvBancoDeDados.VendorLib := TResourceUtils.carregarArquivoResource('libmysql.dll','ravin/bibliotecas');
+  CarregaLib;//drvBancoDeDados.VendorLib := TResourceUtils.carregarArquivoResource('libmysql.dll','ravin/bibliotecas');
   if not cnxBancoDeDados.Connected then
     begin
       cnxBancoDeDados.Connected := true;
@@ -145,15 +164,18 @@ var
   LSqlArquivoScripts: TStringList;
   LCaminhoArquivo: String;
 begin
-  LSqlArquivoScripts := TStringList.Create;
-  LCaminhoArquivo := 'C:\Users\dtlsilva\Documents\ravin\database\inserts.sql';
-  LSqlArquivoScripts.LoadFromFile(LCaminhoArquivo);
+  //LSqlArquivoScripts := TStringList.Create;
+  //LCaminhoArquivo := 'C:\Users\Ultrabook Lenovo\Documents\ravin\database/inserts.sql';
+  //LCaminhoArquivo := TResourceUtils.carregarArquivoResource('inserts.sql','ravin/database');
+  //'C:\Users\Ultrabook Lenovo\Documents\ravin\database/inserts.sql';
+  //'C:\Users\dtlsilva\Documents\ravin\database\inserts.sql';
+  //LSqlArquivoScripts.LoadFromFile(TResourceUtils.carregarArquivoResource('inserts.sql','ravin/database'));
 
   //Trye e pressionar TAB cria automaticamente
   try
-    cnxBancoDeDados.StartTransaction;
-    cnxBancoDeDados.ExecSQL(TResourceUtils.carregarArquivoResource('createTable.sql','ravin teste'));
-    cnxBancoDeDados.Commit;
+    //cnxBancoDeDados.StartTransaction;
+    cnxBancoDeDados.ExecSQL(TResourceUtils.carregarArquivoResource('inserts.sql','ravin teste'));
+    //cnxBancoDeDados.Commit;
   except
     on E: Exception do Begin
       cnxBancoDeDados.Rollback;
@@ -161,7 +183,7 @@ begin
     End;
   end;
 
-  FreeAndNil(LSqlArquivoScripts);
+  //FreeAndNil(LSqlArquivoScripts);
 end;
 
 end.

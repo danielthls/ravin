@@ -3,11 +3,11 @@ unit UfrmRegistrar;
 interface
 
 uses
-  Winapi.Windows,
   Winapi.Messages,
   System.SysUtils,
   System.Variants,
   System.Classes,
+  System.MaskUtils,
 
   FireDAC.Phys.MySQLWrapper,
   Vcl.Graphics,
@@ -32,9 +32,11 @@ type
     edtLogin: TEdit;
     edtSenha: TEdit;
     edtConfirmarSenha: TEdit;
-    MaskEdit1: TMaskEdit;
+    edtCpf: TEdit;
     procedure lblSubTituloAutenticarClick(Sender: TObject);
     procedure frmBotaoPrimarioRegistrarspbBotaoPrimarioClick(Sender: TObject);
+    procedure edtCpfExit(Sender: TObject);
+    procedure edtCpfKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
     procedure SetMainForm(NovoMainForm: TForm);
@@ -49,9 +51,20 @@ implementation
 
 uses
   UusuarioDao,
-  Uusuario, UfrmLogin; // , UfrmAutenticar;
+  Uusuario, UfrmLogin, Winapi.Windows; // , UfrmAutenticar;
 
 {$R *.dfm}
+
+procedure TfrmRegistrar.edtCpfExit(Sender: TObject);
+begin
+  edtCpf.text := FormatMaskText('000\.000\.000\-00;0;', edtCpf.text);
+end;
+
+procedure TfrmRegistrar.edtCpfKeyPress(Sender: TObject; var Key: Char);
+begin
+  if not ( key in ['0'..'9']) then
+    key := #0;
+end;
 
 procedure TfrmRegistrar.frmBotaoPrimarioRegistrarspbBotaoPrimarioClick
   (Sender: TObject);
