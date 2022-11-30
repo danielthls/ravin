@@ -29,6 +29,7 @@ type
     procedure InicializarAplicacao();
     procedure ShowPainelGestao;
     procedure ShowLogin;
+    function PrazoLogin: boolean;
 
 
   public
@@ -56,12 +57,37 @@ var
 begin
   LLogado := TIniUtils.lerPropriedade(TSECAO.INFORMACOES_GERAIS,
     TPROPRIEDADE.LOGADO);
-  if LLogado = TIniUtils.VALOR_VERDADEIRO then
+  if (LLogado = TIniUtils.VALOR_VERDADEIRO) and (PrazoLogin) then
     showPainelGestao
   else
     showLogin;
 end;
 
+
+function TfrmSplash.PrazoLogin: boolean;
+const NUMERO_MAXIMO_DIAS_LOGIN: Integer = 5;
+var
+  xDiaString: String;
+  xDiaLogin: tDateTime;
+  xPrazoLogin: tDateTime;
+begin
+  xDiaString := TIniUtils.lerPropriedade(TSECAO.LOGIN,TPROPRIEDADE.ULTIMO_LOGIN);
+  try
+    xDiaLogin := StrToDateTime(xDiaString);
+  except
+    on E: Exception do
+    begin
+      Result:= False;
+      Exit;
+    end;
+  end;
+  xPrazoLogin := incDay(xDiaLogin, NUMERO_MAXIMO_DIAS_LOGIN);
+  if now < xPrazoLogin then
+    Result := True
+  else
+    Result := False;
+
+end;
 
 procedure TfrmSplash.tmrSplashTimer(Sender: TObject);
 begin

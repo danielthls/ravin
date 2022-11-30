@@ -30,7 +30,7 @@ begin
   try
     try
       LCaminhoPastaAplicacao := TPath.Combine(TPath.GetDocumentsPath, PNomeAplicacao);
-      LCaminhoArquivo := TPath.Combine(LCaminhoPastaAplicacao, PNomeAplicacao);
+      LCaminhoArquivo := TPath.Combine(LCaminhoPastaAplicacao, PNomeArquivo);
 
       LConteudoArquivo.LoadFromFile(LCaminhoArquivo);
 

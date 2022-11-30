@@ -18,6 +18,7 @@ type
     procedure DataModuleCreate(Sender: TObject);
     procedure cnxBancoDeDadosBeforeConnect(Sender: TObject);
     procedure cnxBancoDeDadosAfterConnect(Sender: TObject);
+    procedure drvBancoDeDadosDriverCreated(Sender: TObject);
   private
     { Private declarations }
     procedure CriarTabelas();
@@ -126,10 +127,17 @@ end;
 
 procedure TdmRavin.DataModuleCreate(Sender: TObject);
 begin
+  //drvBancoDeDados.VendorLib := TResourceUtils.carregarArquivoResource('libmysql.dll','ravin/bibliotecas');
   if not cnxBancoDeDados.Connected then
     begin
       cnxBancoDeDados.Connected := true;
     end;
+end;
+
+
+procedure TdmRavin.drvBancoDeDadosDriverCreated(Sender: TObject);
+begin
+  //drvBancoDeDados.VendorLib := TResourceUtils.carregarArquivoResource('libmysql.dll','ravin/bibliotecas');
 end;
 
 procedure TdmRavin.InserirDados;

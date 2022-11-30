@@ -17,7 +17,7 @@ uses
   UfrmBotaoPrimario,
   Vcl.StdCtrls,
   Vcl.ExtCtrls,
-  Vcl.Imaging.pngimage, System.Actions, Vcl.ActnList, Vcl.ExtActns;
+  Vcl.Imaging.pngimage, System.Actions, Vcl.ActnList, Vcl.ExtActns, Vcl.Mask;
 
 type
   TfrmRegistrar = class(TForm)
@@ -28,11 +28,11 @@ type
     lblTituloAutenticar: TLabel;
     lblSubTituloAutenticar: TLabel;
     edtNome: TEdit;
-    edtCpf: TEdit;
     frmBotaoPrimarioRegistrar: TfrmBotaoPrimario;
     edtLogin: TEdit;
     edtSenha: TEdit;
     edtConfirmarSenha: TEdit;
+    MaskEdit1: TMaskEdit;
     procedure lblSubTituloAutenticarClick(Sender: TObject);
     procedure frmBotaoPrimarioRegistrarspbBotaoPrimarioClick(Sender: TObject);
   private

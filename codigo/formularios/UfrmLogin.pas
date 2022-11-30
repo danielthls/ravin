@@ -138,7 +138,7 @@ begin
   TIniUtils.gravarPropriedade(
       TSECAO.LOGIN, TPROPRIEDADE.PESSOA, edtLogin.text);
   TIniUtils.gravarPropriedade(
-      TSECAO.LOGIN, TPROPRIEDADE.ULTIMO_LOGIN, DateToStr(now));
+      TSECAO.LOGIN, TPROPRIEDADE.ULTIMO_LOGIN, DateTimeToStr(now));
 end;
 
 end.
