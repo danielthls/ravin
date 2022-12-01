@@ -37,6 +37,8 @@ type
     procedure frmBotaoPrimarioRegistrarspbBotaoPrimarioClick(Sender: TObject);
     procedure edtCpfExit(Sender: TObject);
     procedure edtCpfKeyPress(Sender: TObject; var Key: Char);
+    procedure adicionaUsuario;
+    procedure adicionaPessoa;
   private
     { Private declarations }
     procedure SetMainForm(NovoMainForm: TForm);
@@ -51,9 +53,86 @@ implementation
 
 uses
   UusuarioDao,
-  Uusuario, UfrmLogin, Winapi.Windows; // , UfrmAutenticar;
+  Uusuario, UfrmLogin, Winapi.Windows, UPessoa, UPessoaDAO, UValidadorUsuario; // , UfrmAutenticar;
 
 {$R *.dfm}
+
+procedure TfrmRegistrar.adicionaPessoa;
+const
+  funcionario: string = 'F';
+  ativo: integer = 1;
+var
+  xPessoa: TPessoa;
+  xDAO: TPessoaDAO;
+begin
+  try
+    try
+      xPessoa := TPessoa.Create;
+      xPessoa.nome := edtNome.text;
+      xPessoa.tipoPessoa := funcionario;
+      xPessoa.CPF := strToInt(edtCPF.text);
+      xPessoa.Ativo := Ativo;
+      xPessoa.CriadoEm := now;
+      xPessoa.CriadoPor := edtNome.text;
+      xPessoa.AlteradoEm := now;
+      xPessoa.AlteradoPor := edtNome.text;
+
+      xDAO := TPessoaDAO.Create;
+      xDAO.InserirPessoa(xPessoa);
+    except
+      on E: EMySQLNativeException do
+      begin
+        ShowMessage('Erro ao inserir pessoa no banco');
+      end;
+      on E: Exception do
+      begin
+        ShowMessage(e.message);
+      end;
+    end;
+  finally
+    if Assigned(xDao) then
+      FreeAndNil(xPessoa);
+  end;
+end;
+
+procedure TfrmRegistrar.adicionaUsuario;
+var
+  LUsuario: TUsuario;
+  LDao: TUsuarioDao;
+begin
+  { Ler os valores dos campos
+    Criar o objeto do usuário
+    Setar os valores
+    Criar um DAO
+    Chamar o método para salvar o usuário }
+  try
+    try
+      LUsuario := TUsuario.Create;
+      LUsuario.login := edtLogin.Text;
+      LUsuario.senha := edtSenha.Text;
+      LUsuario.pessoaId := 1;
+      LUsuario.criadoem := now;
+      LUsuario.criadopor := edtNome.Text;
+      LUsuario.alteradoem := now;
+      LUsuario.alteradopor := edtNome.Text;
+
+      TValidadorUsuario.Validar(LUsuario,edtConfirmarSenha.text);
+      LDao := TUsuarioDao.Create;
+      LDao.InserirUsuario(LUsuario);
+    except
+      on E: EMySQLNativeException do begin
+        ShowMessage('Erro ao inserir o usuário no banco');
+      end;
+      on E: Exception do
+      begin
+        ShowMessage(e.message);
+      end;
+    end;
+  finally
+     if Assigned(LDao) then
+      FreeAndNil(LUsuario);
+  end;
+end;
 
 procedure TfrmRegistrar.edtCpfExit(Sender: TObject);
 begin
@@ -68,42 +147,10 @@ end;
 
 procedure TfrmRegistrar.frmBotaoPrimarioRegistrarspbBotaoPrimarioClick
   (Sender: TObject);
-var
-  LUsuario: TUsuario;
-  LDao: TUsuarioDao;
+
 begin
-  { Ler os valores dos campos
-    Criar o objeto do usuário
-    Setar os valores
-    Criar um DAO
-    Chamar o método para salvar o usuário }
-  try
-    try
-      LUsuario := TUsuario.Create;
-      LUsuario.login := edtLogin.Text;
-      LUsuario.senha := edtLogin.Text;
-      LUsuario.pessoaId := 1;
-      LUsuario.criadoem := now;
-      LUsuario.criadopor := edtLogin.Text;
-      LUsuario.alteradoem := now;
-      LUsuario.alteradopor := edtLogin.Text;
 
-      LDao := TUsuarioDao.Create;
-      LDao.InserirUsuario(LUsuario);
-    except
-      on E: EMySQLNativeException do begin
-        ShowMessage('Erro ao inserir o usuário no banco');
-      end;
-      on E: Exception do
-      begin
-        ShowMessage(e.message);
-      end;
-    end;
-  finally
-     if Assigned(LDao) then
-      FreeAndNil(LUsuario)
-  end;
-
+  adicionaUsuario;
 end;
 
 procedure TfrmRegistrar.lblSubTituloAutenticarClick(Sender: TObject);

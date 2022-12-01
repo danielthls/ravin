@@ -175,6 +175,27 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="..\codigo\utils\UFormUtils.pas"/>
+        <DCCReference Include="..\codigo\dao\UPessoaDAO.pas"/>
+        <DCCReference Include="..\codigo\modelos\UPessoa.pas"/>
+        <DCCReference Include="..\codigo\frames\UfrmBotaoCancelar.pas">
+            <Form>frmBotaoCancelar</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="..\codigo\frames\UfrmBotaoExcluir.pas">
+            <Form>frmBotaoExcluir</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="..\codigo\formularios\UfrmCadastroCliente.pas">
+            <Form>frmCadastroCliente</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="..\codigo\formularios\UfrmListaClientes.pas">
+            <Form>frmListaClientes</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="..\codigo\validadores\UValidadorPessoa.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

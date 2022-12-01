@@ -13,7 +13,7 @@ uses
   Vcl.ExtCtrls,
   Vcl.StdCtrls,
   Vcl.Imaging.pngimage,
-  UfrmItemMenu;
+  UfrmItemMenu, UfrmListaClientes;
 type
   TfrmPainelGestao = class(TForm)
     pnlMenu: TPanel;
@@ -77,11 +77,11 @@ begin
 end;
 procedure TfrmPainelGestao.frmMenuItemPessoaslblTituloClick(Sender: TObject);
 begin
-  if (not Assigned(frmUsuariosTeste)) then
+  if (not Assigned(frmListaClientes)) then
   begin
-    Application.CreateForm(TfrmUsuariosTeste, frmUsuariosTeste);
+    Application.CreateForm(TfrmListaClientes, frmListaClientes);
   end;
-  frmUsuariosTeste.show();
+  frmListaClientes.show();
 end;
 
 procedure TfrmPainelGestao.frmMenuItemProdutoslblTituloClick(Sender: TObject);
@@ -98,6 +98,10 @@ begin
     TPROPRIEDADE.LOGADO,
     TIniUtils.VALOR_FALSO);
   TFormUtils.SetarFormPrincipal(frmLogin);
+  if (not Assigned(frmLogin)) then
+  begin
+    Application.CreateForm(TfrmLogin, frmLogin);
+  end;
   frmLogin.Show;
   close;
 end;

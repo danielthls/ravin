@@ -22,7 +22,14 @@ uses
   UValidadorUsuario in '..\codigo\validadores\UValidadorUsuario.pas',
   UiniUtils in '..\codigo\utils\UiniUtils.pas',
   TESTE in '..\TESTE.pas' {frmUsuariosTeste},
-  UFormUtils in '..\codigo\utils\UFormUtils.pas';
+  UFormUtils in '..\codigo\utils\UFormUtils.pas',
+  UPessoaDAO in '..\codigo\dao\UPessoaDAO.pas',
+  UPessoa in '..\codigo\modelos\UPessoa.pas',
+  UfrmBotaoCancelar in '..\codigo\frames\UfrmBotaoCancelar.pas' {frmBotaoCancelar: TFrame},
+  UfrmBotaoExcluir in '..\codigo\frames\UfrmBotaoExcluir.pas' {frmBotaoExcluir: TFrame},
+  UfrmCadastroCliente in '..\codigo\formularios\UfrmCadastroCliente.pas' {frmCadastroCliente},
+  UfrmListaClientes in '..\codigo\formularios\UfrmListaClientes.pas' {frmListaClientes},
+  UValidadorPessoa in '..\codigo\validadores\UValidadorPessoa.pas';
 
 {$R *.res}
 
@@ -32,7 +39,5 @@ begin
   ReportMemoryLeaksOnShutdown := True;
   Application.CreateForm(TdmRavin, dmRavin);
   Application.CreateForm(TfrmSplash, frmSplash);
-  Application.CreateForm(TfrmRegistrar, frmRegistrar);
-  Application.CreateForm(TfrmUsuariosTeste, frmUsuariosTeste);
   Application.Run;
 end.

@@ -65,7 +65,7 @@ begin
    xCaminho := TIniUtils.lerPropriedade(TSECAO.CAMINHOSIBD,
     TPROPRIEDADE.PESSOA);  // Lê sessão CAMINHOSIBD propriedade PESSOA
   LCriarBaseDados := {not} FileExists(xCaminho);
-  if LCriarBaseDados then
+  if not LCriarBaseDados then
     begin
       CriarTabelas;
       InserirDados;

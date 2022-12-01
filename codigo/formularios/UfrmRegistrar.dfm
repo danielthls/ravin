@@ -23081,7 +23081,6 @@ object frmRegistrar: TfrmRegistrar
       ParentFont = False
       TabOrder = 5
       TextHint = 'Digite seu CPF'
-      OnExit = edtCpfExit
       OnKeyPress = edtCpfKeyPress
     end
   end
