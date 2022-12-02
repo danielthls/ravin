@@ -1191,7 +1191,6 @@ object frmLogin: TfrmLogin
         74646174653A74696D657374616D7000323032322D31312D30355430343A3139
         3A35342B30303A30308DD5E4F20000000049454E44AE426082}
       Stretch = True
-      OnClick = Image1Click
     end
     object Label1: TLabel
       Left = 0

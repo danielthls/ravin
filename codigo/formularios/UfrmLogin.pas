@@ -21,7 +21,6 @@ type
     Panel2: TPanel;
     Panel3: TPanel;
     procedure frmBotao1SpdBtnButtonClick(Sender: TObject);
-    procedure Image1Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure lblRegistrarClick(Sender: TObject);
   private
@@ -130,11 +129,6 @@ end;
 procedure TfrmLogin.frmBotao1SpdBtnButtonClick(Sender: TObject);
 begin
   Autenticar;
-end;
-
-procedure TfrmLogin.Image1Click(Sender: TObject);
-begin
-  showmessage('teste');
 end;
 
 procedure TfrmLogin.lblRegistrarClick(Sender: TObject);

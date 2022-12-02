@@ -7,7 +7,6 @@ uses
   System.SysUtils,
   System.Variants,
   System.Classes,
-  System.MaskUtils,
 
   FireDAC.Phys.MySQLWrapper,
   Vcl.Graphics,
@@ -39,6 +38,10 @@ type
     procedure edtCpfKeyPress(Sender: TObject; var Key: Char);
     procedure adicionaUsuario;
     procedure adicionaPessoa;
+    procedure abrirLogin;
+
+
+
   private
     { Private declarations }
     procedure SetMainForm(NovoMainForm: TForm);
@@ -53,35 +56,57 @@ implementation
 
 uses
   UusuarioDao,
-  Uusuario, UfrmLogin, Winapi.Windows, UPessoa, UPessoaDAO, UValidadorUsuario; // , UfrmAutenticar;
+  Uusuario, UfrmLogin, Winapi.Windows, UPessoa, UPessoaDAO, UValidadorUsuario,
+  UValidadorPessoa, UFormUtils; // , UfrmAutenticar;
 
 {$R *.dfm}
+
+procedure TfrmRegistrar.abrirLogin;
+begin
+    if not Assigned(frmLogin) then
+  begin
+    Application.CreateForm(TfrmLogin, frmLogin);
+  end;
+
+  TFormUtils.SetarFormPrincipal(frmLogin);
+  frmLogin.Show();
+
+  Close();
+end;
 
 procedure TfrmRegistrar.adicionaPessoa;
 const
   funcionario: string = 'F';
   ativo: integer = 1;
 var
+  xCPF: String;
   xPessoa: TPessoa;
   xDAO: TPessoaDAO;
 begin
   try
     try
+      edtCPF.text := TValidadorPessoa.mascaraCPF(edtCPF.text);
+      TValidadorPessoa.contaCaracteresCPF(edtCPF.text);
+
       xPessoa := TPessoa.Create;
       xPessoa.nome := edtNome.text;
       xPessoa.tipoPessoa := funcionario;
-      xPessoa.CPF := strToInt(edtCPF.text);
+      xPessoa.CPF := TValidadorPessoa.trimCPF(edtCPF.text);
       xPessoa.Ativo := Ativo;
       xPessoa.CriadoEm := now;
       xPessoa.CriadoPor := edtNome.text;
       xPessoa.AlteradoEm := now;
       xPessoa.AlteradoPor := edtNome.text;
 
+      TValidadorPessoa.ValidarNome(xPessoa.nome);
+      TValidadorPessoa.ValidarCPF(xPessoa.CPF);
+
       xDAO := TPessoaDAO.Create;
       xDAO.InserirPessoa(xPessoa);
     except
       on E: EMySQLNativeException do
       begin
+        //ShowMessage(e.message);
         ShowMessage('Erro ao inserir pessoa no banco');
       end;
       on E: Exception do
@@ -90,8 +115,9 @@ begin
       end;
     end;
   finally
+    FreeAndNil(xPessoa);
     if Assigned(xDao) then
-      FreeAndNil(xPessoa);
+      FreeAndNil(xDao);
   end;
 end;
 
@@ -110,7 +136,7 @@ begin
       LUsuario := TUsuario.Create;
       LUsuario.login := edtLogin.Text;
       LUsuario.senha := edtSenha.Text;
-      LUsuario.pessoaId := 1;
+      LUsuario.pessoaId := LDao.getPessoaID;
       LUsuario.criadoem := now;
       LUsuario.criadopor := edtNome.Text;
       LUsuario.alteradoem := now;
@@ -129,19 +155,22 @@ begin
       end;
     end;
   finally
-     if Assigned(LDao) then
-      FreeAndNil(LUsuario);
+    FreeAndNil(LUsuario);
+    if Assigned(LDao) then
+      FreeAndNil(LDao);
   end;
 end;
 
+
+
 procedure TfrmRegistrar.edtCpfExit(Sender: TObject);
 begin
-  edtCpf.text := FormatMaskText('000\.000\.000\-00;0;', edtCpf.text);
+  edtCPF.text := TValidadorPessoa.mascaraCPF(edtCPF.text);
 end;
 
 procedure TfrmRegistrar.edtCpfKeyPress(Sender: TObject; var Key: Char);
 begin
-  if not ( key in ['0'..'9']) then
+  if not ( (key in ['0'..'9']) or (key = #8)) then
     key := #0;
 end;
 
@@ -149,8 +178,21 @@ procedure TfrmRegistrar.frmBotaoPrimarioRegistrarspbBotaoPrimarioClick
   (Sender: TObject);
 
 begin
-
-  adicionaUsuario;
+  try
+    //continua executando mesmo com erro
+    adicionaPessoa;
+    adicionaUsuario;
+    abrirLogin;
+  except
+    on E: EMySQLNativeException do
+    begin
+      ShowMessage('Erro ao inserir o usuário no banco');
+    end;
+    on E: Exception do
+    begin
+      ShowMessage(e.message);
+    end;
+  end;
 end;
 
 procedure TfrmRegistrar.lblSubTituloAutenticarClick(Sender: TObject);
@@ -166,14 +208,11 @@ begin
   Close();
 end;
 
+
+
 procedure TfrmRegistrar.SetMainForm(NovoMainForm: TForm);
-var
-  tmpMain: ^TCustomForm;
 begin
-  tmpMain := @Application.Mainform;
-  tmpMain^ := NovoMainForm;
+
 end;
-
-
 
 end.

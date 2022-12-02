@@ -64,9 +64,13 @@ var
 begin
    xCaminho := TIniUtils.lerPropriedade(TSECAO.CAMINHOSIBD,
     TPROPRIEDADE.PESSOA);  // Lê sessão CAMINHOSIBD propriedade PESSOA
-  LCriarBaseDados := {not} FileExists(xCaminho);
-  if not LCriarBaseDados then
-    begin
+  LCriarBaseDados := not FileExists(xCaminho);
+  if LCriarBaseDados then
+    xCaminho := TIniUtils.lerPropriedade(TSECAO.CAMINHOSIBD,
+      TPROPRIEDADE.PESSOA1);
+  LCriarBaseDados := not FileExists(xCaminho);
+  if LCriarBaseDados then
+     begin
       CriarTabelas;
       InserirDados;
     end;
@@ -83,9 +87,15 @@ var
   xDatabase:String;
   xCaminho: String;
 begin
+
+  CarregaLib;
   xCaminho := TIniUtils.lerPropriedade(TSECAO.CAMINHOSIBD,
     TPROPRIEDADE.PESSOA);
   LCriarBaseDados := not FileExists(xCaminho);
+  if LCriarBaseDados = true then
+    xCaminho := TIniUtils.lerPropriedade(TSECAO.CAMINHOSIBD,
+    TPROPRIEDADE.PESSOA1);
+   LCriarBaseDados := not FileExists(xCaminho);
 
   xServer := TIniUtils.lerPropriedade(TSECAO.BANCO_DE_DADOS,
     TPROPRIEDADE.SERVER);
@@ -112,7 +122,6 @@ begin
         Params.Values['Database'] := xDatabase;
       end;
   end;
-
 end;
 
 procedure TdmRavin.CriarTabelas;
@@ -146,7 +155,7 @@ end;
 
 procedure TdmRavin.DataModuleCreate(Sender: TObject);
 begin
-  CarregaLib;//drvBancoDeDados.VendorLib := TResourceUtils.carregarArquivoResource('libmysql.dll','ravin/bibliotecas');
+  drvBancoDeDados.VendorLib := TResourceUtils.carregarArquivoResource('libmysql.dll','ravin/bibliotecas');
   if not cnxBancoDeDados.Connected then
     begin
       cnxBancoDeDados.Connected := true;

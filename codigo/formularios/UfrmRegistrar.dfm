@@ -22994,7 +22994,7 @@ object frmRegistrar: TfrmRegistrar
       Color = clWhite
       ParentBackground = False
       ParentColor = False
-      TabOrder = 1
+      TabOrder = 5
       ExplicitLeft = 50
       ExplicitTop = 344
       ExplicitWidth = 250
@@ -23079,8 +23079,9 @@ object frmRegistrar: TfrmRegistrar
       Font.Name = 'Roboto'
       Font.Style = []
       ParentFont = False
-      TabOrder = 5
+      TabOrder = 1
       TextHint = 'Digite seu CPF'
+      OnExit = edtCpfExit
       OnKeyPress = edtCpfKeyPress
     end
   end

@@ -7,6 +7,7 @@ object dmRavin: TdmRavin
     Params.Strings = (
       'Server='
       'Port='
+      'TinyIntFormat=Integer'
       'DriverID=MySQL')
     UpdateOptions.AssignedValues = [uvUpdateMode]
     AfterConnect = cnxBancoDeDadosAfterConnect

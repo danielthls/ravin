@@ -3,7 +3,7 @@ unit UUsuarioDAO;
 interface
 
 uses
-  UUsuario, FireDAC.Comp.Client, System.SysUtils, System.Generics.Collections;
+  UPessoaDAO, UUsuario, FireDAC.Comp.Client, System.SysUtils, System.Generics.Collections;
 
 type
   TUsuarioDAO = class
@@ -12,7 +12,7 @@ type
   protected
 
   public
-
+    function getPessoaID: integer;
     function BuscarUsuarioPorLoginSenha(PLogin, PSenha: String): TUsuario;
     procedure InserirUsuario(PUsuario: TUsuario);
     function BuscasTodosUsuarios: TList<TUsuario>;
@@ -23,7 +23,7 @@ implementation
 
 { TUsuarioDAO }
 
-uses UdmRavin;
+uses UdmRavin, UPessoa;
 
 function TUsuarioDAO.BuscarUsuarioPorLoginSenha(PLogin, PSenha: String)
   : TUsuario;
@@ -89,6 +89,24 @@ begin
   LQuery.Close();
   FreeAndNil(LQuery);
   Result := LLista;
+end;
+
+function TUsuarioDAO.getPessoaID: integer;
+var
+  xPessoaDAO: TPessoaDAO;
+  xPessoa: TPessoa;
+  xID: integer;
+begin
+  xPessoaDao := TPessoaDao.Create;
+  xID := 0;
+  try
+    xPessoa := xPessoaDAO.BuscarUltimaPessoaInserida;
+    xID := xPessoa.id;
+    freeAndNil(xPessoa);
+  finally
+    freeAndNil(xPessoaDAO);
+    Result := xID
+  end;
 end;
 
 procedure TUsuarioDAO.InserirUsuario(PUsuario: TUsuario);

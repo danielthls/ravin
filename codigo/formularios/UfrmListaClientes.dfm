@@ -11,6 +11,10 @@ object frmListaClientes: TfrmListaClientes
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnClose = FormClose
+  OnDeactivate = FormDeactivate
+  OnHide = FormHide
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object pnlListaClientes: TPanel
@@ -193,6 +197,16 @@ object frmListaClientes: TfrmListaClientes
       ParentFont = False
       TabOrder = 2
       ViewStyle = vsReport
+      ExplicitLeft = 32
+    end
+    object Button1: TButton
+      Left = 344
+      Top = 405
+      Width = 75
+      Height = 25
+      Caption = 'Button1'
+      TabOrder = 3
+      OnClick = Button1Click
     end
   end
 end

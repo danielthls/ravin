@@ -56,11 +56,11 @@ begin
     raise Exception.Create('O login deve ter no mínimo 4 caracteres.');
   end;
 
-  for I := 0 to PUsuario.login.Length do
+  for I := 1 to PUsuario.login.Length do
   begin
-    if not (PUsuario.login[i] in ['0'..'9']) or
+    if not ((PUsuario.login[i] in ['0'..'9']) or
     ((PUsuario.login[i] in ['a'..'z']) or (PUsuario.login[i] in ['A'..'Z'])) or
-    (PUsuario.login[i] = '_') or (PUsuario.login[i] = '.') then
+    (PUsuario.login[i] = '_') or (PUsuario.login[i] = '.') or (PUsuario.login[i] = #0)) then
     begin
       raise Exception.Create('Login inválido, utilize apenas letras e números');
     end;
