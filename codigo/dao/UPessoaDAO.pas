@@ -4,7 +4,7 @@ interface
 
 uses
 
-UPessoa, FireDAC.Comp.Client, System.SysUtils, System.Generics.Collections;
+UUsuarioDAO, UPessoa, FireDAC.Comp.Client, System.SysUtils, System.Generics.Collections;
 
 type
 TPessoaDAO = class
@@ -19,6 +19,8 @@ TPessoaDAO = class
   function BuscarPessoaPorID(PId: integer): TPessoa;
   function BuscarUltimaPessoaInserida: TPessoa;
   function PreencherTPessoa(PQuery: TFDQuery): TPessoa;
+  procedure ExcluirPessoa(pID: Integer);
+  function buscarFunctionarioPorLogin(
   //function BuscarUltimaPessoaInseridaB: Integer;
 
 end;
@@ -121,6 +123,20 @@ begin
   FreeAndNil(xQuery);
   Result := xPessoa;
 
+end;
+
+procedure TPessoaDAO.ExcluirPessoa(pID: Integer);
+var
+  xQuery: TFDQuery;
+begin
+  xQuery := TFDQuery.Create(nil);
+  with xQuery do
+  begin
+    Connection := dmRavin.cnxBancoDeDados;
+    xQuery.SQL.Text := 'DELETE FROM pessoa WHERE id = ' + intToStr(pID);
+    ExecSQL;
+  end;
+  freeAndNil(xQuery);
 end;
 
 procedure TPessoaDAO.InserirPessoa(PPessoa: TPessoa);

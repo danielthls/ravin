@@ -16,6 +16,8 @@ type
     function BuscarUsuarioPorLoginSenha(PLogin, PSenha: String): TUsuario;
     procedure InserirUsuario(PUsuario: TUsuario);
     function BuscasTodosUsuarios: TList<TUsuario>;
+    function BuscarUsuarioPorLogin(PLogin: string): TUsuario;
+    function PreencherTUsuario(PQuery: TFDQuery): TUsuario;
 
   end;
 
@@ -43,15 +45,7 @@ begin
 
   if not LQuery.IsEmpty then // Verifica se o LQuery retornou algo
   begin
-    LUsuario := TUsuario.Create();
-    LUsuario.id := LQuery.FieldByName('id').AsInteger;
-    LUsuario.login := LQuery.FieldByName('login').AsString;
-    LUsuario.senha := LQuery.FieldByName('senha').AsString;
-    LUsuario.pessoaId := LQuery.FieldByName('pessoaId').AsInteger;
-    LUsuario.criadoEm := LQuery.FieldByName('criadoEm').AsDateTime;
-    LUsuario.criadoPor := LQuery.FieldByName('criadoPor').AsString;
-    LUsuario.alteradoEm := LQuery.FieldByName('alteradoEm').AsDateTime;
-    LUsuario.alteradoPor := LQuery.FieldByName('alteradoPor').AsString;
+    LUsuario := PreencherTUsuario(LQuery);
   end;
 
   LQuery.Close();
@@ -74,21 +68,37 @@ begin
   LQuery.First;
 
   while not LQuery.Eof do begin
-    LUsuario := TUsuario.Create;
-    LUsuario.id := LQuery.FieldByName('id').AsInteger;
-    LUsuario.login := LQuery.FieldByName('login').AsString;
-    LUsuario.senha := LQuery.FieldByName('senha').AsString;
-    LUsuario.pessoaId := LQuery.FieldByName('pessoaId').AsInteger;
-    LUsuario.criadoEm := LQuery.FieldByName('criadoEm').AsDateTime;
-    LUsuario.criadoPor := LQuery.FieldByName('criadoPor').AsString;
-    LUsuario.alteradoEm := LQuery.FieldByName('alteradoEm').AsDateTime;
-    LUsuario.alteradoPor := LQuery.FieldByName('alteradoPor').AsString;
+    LUsuario := PreencherTUsuario(LQuery);
     LLista.Add(LUsuario);
     LQuery.Next;
   end;
   LQuery.Close();
   FreeAndNil(LQuery);
   Result := LLista;
+end;
+
+function TUsuarioDAO.buscarUsuarioPorLogin(PLogin: string): TUsuario;
+var
+  xQuery: TFDQuery;
+  xUsuario: TUsuario;
+begin
+  xQuery := TFDQuery.Create(nil);
+  xQuery.Connection := dmRavin.cnxBancoDeDados;
+  xQuery.SQL.Text := 'Select * from usuario ' +
+    'where login = :login';
+  xQuery.ParamByName('login').AsString := PLogin;
+  xQuery.Open();
+
+  xUsuario := nil; // Para não haver sujeira na merória
+
+  if not xQuery.IsEmpty then // Verifica se o LQuery retornou algo
+  begin
+    xUsuario := PreencherTUsuario(XQuery);
+  end;
+
+  xQuery.Close();
+  FreeAndNil(xQuery);
+  Result := xUsuario;
 end;
 
 function TUsuarioDAO.getPessoaID: integer;
@@ -133,6 +143,22 @@ begin
     ExecSQL();
   end;
   FreeAndNil(LQuery);
+end;
+
+function TUsuarioDAO.PreencherTUsuario(PQuery: TFDQuery): TUsuario;
+var
+  xUsuario: TUsuario;
+begin
+  xUsuario := TUsuario.Create;
+  xUsuario.id := PQuery.FieldByName('id').AsInteger;
+  xUsuario.login := PQuery.FieldByName('login').AsString;
+  xUsuario.senha := PQuery.FieldByName('senha').AsString;
+  xUsuario.pessoaId := PQuery.FieldByName('pessoaId').AsInteger;
+  xUsuario.criadoEm := PQuery.FieldByName('criadoEm').AsDateTime;
+  xUsuario.criadoPor := PQuery.FieldByName('criadoPor').AsString;
+  xUsuario.alteradoEm := PQuery.FieldByName('alteradoEm').AsDateTime;
+  xUsuario.alteradoPor := PQuery.FieldByName('alteradoPor').AsString;
+  Result := xUsuario;
 end;
 
 end.

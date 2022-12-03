@@ -13,6 +13,7 @@ object frmCadastroCliente: TfrmCadastroCliente
   Font.Style = []
   OldCreateOrder = False
   Visible = True
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object pnlCadastroCliente: TPanel
