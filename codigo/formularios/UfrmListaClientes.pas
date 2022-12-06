@@ -39,8 +39,8 @@ type
     procedure FormShow(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure FormDeactivate(Sender: TObject);
-    procedure FormHide(Sender: TObject);
+
+
 
   private
     { Private declarations }
@@ -79,16 +79,6 @@ begin
   lvwClientes.Clear;
 end;
 
-procedure TfrmListaClientes.FormDeactivate(Sender: TObject);
-begin
-  lvwClientes.clear;
-end;
-
-procedure TfrmListaClientes.FormHide(Sender: TObject);
-begin
- lvwClientes.Clear;
-end;
-
 procedure TfrmListaClientes.FormShow(Sender: TObject);
 begin
   listarClientes;
@@ -118,19 +108,22 @@ var
   i: Integer;
   xItem: TListItem;
 begin
-  xDAO := TPessoaDAO.Create;
-  xLista:= xDAO.BuscarTodosOsClientes;
-  for I := 0 to xLista.Count - 1 do
+  if lvwClientes.items.count = 0  then
   begin
-    xItem := lvwClientes.items.Add;
-    xItem.Caption := xLista[i].nome;
-    xItem.SubItems.Add(TValidadorPessoa.mascaraCPF(xLista[i].CPF));
-    xItem.SubItems.Add(intToStr(xLista[i].telefone));
-    xItem.SubItems.Add(clienteAtivo(xLista[i].ativo));
-    freeAndNil(xLista[i]);
+    xDAO := TPessoaDAO.Create;
+    xLista:= xDAO.BuscarTodosOsClientes;
+    for I := 0 to xLista.Count - 1 do
+    begin
+      xItem := lvwClientes.items.Add;
+      xItem.Caption := xLista[i].nome;
+      xItem.SubItems.Add(TValidadorPessoa.mascaraCPF(xLista[i].CPF));
+      xItem.SubItems.Add(intToStr(xLista[i].telefone));
+      xItem.SubItems.Add(clienteAtivo(xLista[i].ativo));
+      freeAndNil(xLista[i]);
+    end;
+    freeAndNil(xDAO);
+    freeAndNil(xLista);
   end;
-  freeAndNil(xDAO);
-  freeAndNil(xLista);
 end;
 
 end.

@@ -41,7 +41,8 @@ type
   private
     xSalvo: boolean;
     procedure confirmaExclusao;
-    procedure excluiRegistro(pId: integer);
+    procedure excluiRegistro;
+    procedure salvarCliente;
     procedure resetaCampos;
     function buscarCriadoPor: string;
     { Private declarations }
@@ -62,10 +63,15 @@ uses
 function TfrmCadastroCliente.buscarCriadoPor: string;
 var
   xUsuarioDAO : TUsuarioDAO;
-  xPessoaDAO : TPessoaDAO;
   xPessoa: TPessoa;
+  xLogin: String;
 begin
-
+  xLogin := TIniUtils.lerPropriedade(TSECAO.LOGIN, TPROPRIEDADE.PESSOA);
+  xUsuarioDAO := TUsuarioDAO.Create;
+  xPessoa := xUsuarioDAO.buscarFuncionarioPorLogin(xLogin);
+  Result := xPessoa.nome;
+  freeAndNil(xPessoa);
+  freeAndNil(xUsuarioDAO);
 end;
 
 procedure TfrmCadastroCliente.confirmaExclusao;
@@ -76,12 +82,15 @@ begin
     [TMsgDlgBtn.mbYes, TMsgDlgBtn.mbNo], 0);
   if xConfirma = mrYes then
   begin
+    if xSalvo = true then
+      excluiRegistro;
+    resetaCampos;
     ShowMessage('Registro excluído com sucesso');
     Close;
   end;
 end;
 
-procedure TfrmCadastroCliente.excluiRegistro(pId: integer);
+procedure TfrmCadastroCliente.excluiRegistro;
 var
   xDAO : TPessoaDAO;
   xPessoa : TPessoa;
@@ -92,6 +101,7 @@ begin
   freeAndNil(xPessoa);
   freeAndNil(xDAO);
   resetaCampos;
+  xSalvo := false;
 end;
 
 procedure TfrmCadastroCliente.FormCreate(Sender: TObject);
@@ -113,6 +123,20 @@ end;
 
 procedure TfrmCadastroCliente.lblInformacoesGerenciaisspbBotaoPrimarioClick(
   Sender: TObject);
+begin
+  salvarCliente;
+  xSalvo := true;
+end;
+
+procedure TfrmCadastroCliente.resetaCampos;
+begin
+  edtNome.Text := '';
+  edtTelefone.Text := '';
+  dtpDataNascimento.date := now;
+  mskCPF.text := '';
+end;
+
+procedure TfrmCadastroCliente.salvarCliente;
 const
   cliente: String = 'F';
   ativo: integer = 1;
@@ -123,17 +147,18 @@ var
 begin
   try
     try
-      xCriadoAlteradoPor := TUsuarioDAO.buscarUsuarioPorLogin(TIniUtils.lerPropriedade(TSECAO.LOGIN, TPROPRIEDADE.PESSOA));
+      xCriadoAlteradoPor := buscarCriadoPor;
 
       xPessoa := TPessoa.Create;
       xPessoa.Nome := edtNome.Text;
       xPessoa.tipoPessoa := cliente;
       xPessoa.CPF := TValidadorPessoa.trimCPF(mskCPF.text);
+      xPessoa.Telefone := strToInt(edtTelefone.text);
       xPessoa.Ativo := Ativo;
       xPessoa.CriadoEm := now;
-      xPessoa.CriadoPor := edtNome.text;
+      xPessoa.CriadoPor := xCriadoAlteradoPor;
       xPessoa.AlteradoEm := now;
-      xPessoa.AlteradoPor := edtNome.text;
+      xPessoa.AlteradoPor := xCriadoAlteradoPor;
 
       TValidadorPessoa.ValidarNome(xPessoa.nome);
       TValidadorPessoa.ValidarCPF(xPessoa.CPF);
@@ -156,14 +181,6 @@ begin
   end;
 
   showMessage('Cliente cadastrado com sucesso');
-end;
-
-procedure TfrmCadastroCliente.resetaCampos;
-begin
-  edtNome.Text := '';
-  edtTelefone.Text := '';
-  dtpDataNascimento.date := now;
-  mskCPF.text := '';
 end;
 
 end.

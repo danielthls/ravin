@@ -4,7 +4,7 @@ interface
 
 uses
 
-UUsuarioDAO, UPessoa, FireDAC.Comp.Client, System.SysUtils, System.Generics.Collections;
+{UUsuarioDAO,} UPessoa, FireDAC.Comp.Client, System.SysUtils, System.Generics.Collections;
 
 type
 TPessoaDAO = class
@@ -18,9 +18,9 @@ TPessoaDAO = class
   function BuscarTodosOsClientes: TList<TPessoa>;
   function BuscarPessoaPorID(PId: integer): TPessoa;
   function BuscarUltimaPessoaInserida: TPessoa;
-  function PreencherTPessoa(PQuery: TFDQuery): TPessoa;
+  class function PreencherTPessoa(PQuery: TFDQuery): TPessoa;
   procedure ExcluirPessoa(pID: Integer);
-  function buscarFunctionarioPorLogin(
+
   //function BuscarUltimaPessoaInseridaB: Integer;
 
 end;
@@ -167,7 +167,7 @@ begin
   freeAndNil(xQuery);
 end;
 
-function TPessoaDAO.PreencherTPessoa(PQuery: TFDQuery): TPessoa;
+class function TPessoaDAO.PreencherTPessoa(PQuery: TFDQuery): TPessoa;
 var
   xPessoa: TPessoa;
 begin

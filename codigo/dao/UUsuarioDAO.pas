@@ -3,7 +3,7 @@ unit UUsuarioDAO;
 interface
 
 uses
-  UPessoaDAO, UUsuario, FireDAC.Comp.Client, System.SysUtils, System.Generics.Collections;
+  UPessoa, UPessoaDAO, UUsuario, FireDAC.Comp.Client, System.SysUtils, System.Generics.Collections;
 
 type
   TUsuarioDAO = class
@@ -17,7 +17,8 @@ type
     procedure InserirUsuario(PUsuario: TUsuario);
     function BuscasTodosUsuarios: TList<TUsuario>;
     function BuscarUsuarioPorLogin(PLogin: string): TUsuario;
-    function PreencherTUsuario(PQuery: TFDQuery): TUsuario;
+    class function PreencherTUsuario(PQuery: TFDQuery): TUsuario;
+    function buscarFuncionarioPorLogin(PLogin: String): TPessoa;
 
   end;
 
@@ -25,7 +26,7 @@ implementation
 
 { TUsuarioDAO }
 
-uses UdmRavin, UPessoa;
+uses UdmRavin;
 
 function TUsuarioDAO.BuscarUsuarioPorLoginSenha(PLogin, PSenha: String)
   : TUsuario;
@@ -75,6 +76,29 @@ begin
   LQuery.Close();
   FreeAndNil(LQuery);
   Result := LLista;
+end;
+
+function TUsuarioDAO.buscarFuncionarioPorLogin(PLogin: String): TPessoa;
+var
+  xQuery : TFDQuery;
+  xPessoa: TPessoa;
+  xUsuario: TUsuario;
+begin
+  xQuery := TFDQuery.Create(nil);
+  xQuery.Connection := dmRavin.cnxBancoDeDados;
+  xUsuario := BuscarUsuarioPorLogin(PLogin);
+  xQuery.SQL.Text := 'SELECT * FROM pessoa WHERE id = ' + intToStr(xUsuario.pessoaId);
+  xQuery.Open;
+  freeAndNil(xUsuario);
+  if not xQuery.IsEmpty then
+  begin
+    xPessoa := TPessoaDAO.PreencherTPessoa(xQuery)
+  end
+  else
+    raise Exception.Create('Erro. Usuário não cadastrado na tabela Pessoa');
+  xQuery.Close;
+  freeAndNil(xQuery);
+  Result := xPessoa;
 end;
 
 function TUsuarioDAO.buscarUsuarioPorLogin(PLogin: string): TUsuario;
@@ -145,7 +169,7 @@ begin
   FreeAndNil(LQuery);
 end;
 
-function TUsuarioDAO.PreencherTUsuario(PQuery: TFDQuery): TUsuario;
+class function TUsuarioDAO.PreencherTUsuario(PQuery: TFDQuery): TUsuario;
 var
   xUsuario: TUsuario;
 begin
